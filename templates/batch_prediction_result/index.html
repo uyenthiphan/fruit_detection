@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Kaisei+Opti&display=swap" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <title>Batch prediction</title>
+</head>
+<body>
+    <div class="g1_2">
+        <div class="g101_2"></div><span class="g101_3">Predictions</span>
+        <table class="table-format">
+            <thead>
+            <tr>
+                <th class="big-cell">Image</th>
+                <th class="small-cell">Fresh </th>
+                <th class="small-cell">Class</th>
+                <th class="small-cell">Fresh Confidence</th>
+                <th class="small-cell">Class Confidence</th>
+            </tr>
+            </thead>
+            <tbody id="imageResults">
+            <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+
+        <script>
+            // Sample data (replace with actual data retrieval logic)
+            const records = [
+            { image: 'path/to/image1.jpg', fresh: 1, class: 'Class A', freshConfidence: 0.85, classConfidence: 0.92 },
+            { image: 'path/to/image2.jpg', fresh: 0, class: 'Class B', freshConfidence: 0.72, classConfidence: 0.88 },
+            { image: 'path/to/image1.jpg', fresh: 1, class: 'Class A', freshConfidence: 0.85, classConfidence: 0.92 },
+            { image: 'path/to/image2.jpg', fresh: 0, class: 'Class B', freshConfidence: 0.72, classConfidence: 0.88 },
+            { image: 'path/to/image1.jpg', fresh: 1, class: 'Class A', freshConfidence: 0.85, classConfidence: 0.92 },
+            { image: 'path/to/image2.jpg', fresh: 0, class: 'Class B', freshConfidence: 0.72, classConfidence: 0.88 },
+            { image: 'path/to/image1.jpg', fresh: 1, class: 'Class A', freshConfidence: 0.85, classConfidence: 0.92 },
+            { image: 'path/to/image2.jpg', fresh: 0, class: 'Class B', freshConfidence: 0.72, classConfidence: 0.88 },
+            { image: 'path/to/image1.jpg', fresh: 1, class: 'Class A', freshConfidence: 0.85, classConfidence: 0.92 },
+            { image: 'path/to/image2.jpg', fresh: 0, class: 'Class B', freshConfidence: 0.72, classConfidence: 0.88 },
+            // Add more records here as needed
+            ];
+
+            const tableBody = document.getElementById('imageResults');
+
+            records.slice(0, 10).forEach(record => {
+            const row = document.createElement('tr');
+
+            const imageCell = document.createElement('td');
+            imageCell.classList.add('big-cell');
+            const image = document.createElement('img');
+            image.src = record.image;
+            image.alt = 'Image';
+            imageCell.appendChild(image);
+            row.appendChild(imageCell);
+
+            const freshCell = document.createElement('td');
+            freshCell.textContent = record.fresh;
+            row.appendChild(freshCell);
+
+            const classCell = document.createElement('td');
+            classCell.textContent = record.class;
+            row.appendChild(classCell);
+
+            const freshConfidenceCell = document.createElement('td');
+            freshConfidenceCell.classList.add('small-cell');
+            freshConfidenceCell.textContent = record.freshConfidence.toFixed(2);
+            row.appendChild(freshConfidenceCell);
+
+            const classConfidenceCell = document.createElement('td');
+            classConfidenceCell.classList.add('small-cell');
+            classConfidenceCell.textContent = record.classConfidence.toFixed(2);
+            row.appendChild(classConfidenceCell);
+
+            tableBody.appendChild(row);
+            });
+        </script>
+</body>
+</html>

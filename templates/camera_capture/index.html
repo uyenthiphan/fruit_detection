@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Kaisei+Opti&display=swap" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <title>Photo capture</title>
+</head>
+
+<body>
+    <div class="g1_2">
+        <div class="v101_2"></div><span class="v101_3">Capture your photo</span>
+        <!-- Video frame container -->
+        <div class="v103_2" id="videoContainer"></div>
+        <form id="uploadForm" action="/take_picture" method="POST">
+            <input type="hidden" id="photoInput" name="photoInput">
+            <button class="v103_4" id="captureButton" type="button">Predict</button>
+        </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Check if the browser supports media devices and getUserMedia API
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    // Request access to the camera
+                    navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        // Create a video element to display the camera stream
+                        var video = document.createElement('video');
+                        video.srcObject = stream;
+                        video.autoplay = true;
+                        document.getElementById('videoContainer').appendChild(video);
+    
+                        // Wait for video metadata to load
+                        video.addEventListener('loadedmetadata', function() {
+                            var captureButton = document.getElementById('captureButton');
+    
+                            // Capture photo when the button is clicked
+                            captureButton.addEventListener('click', function() {
+                                var canvas = document.createElement('canvas');
+                                canvas.width = video.videoWidth;
+                                canvas.height = video.videoHeight;
+                                var context = canvas.getContext('2d');
+    
+                                // Capture the photo immediately without delay
+                                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                                var photoUrl = canvas.toDataURL('image/png');
+                                document.getElementById('photoInput').value = photoUrl;
+                                // Submit the form automatically to save the photo
+                                document.getElementById('uploadForm').submit();
+                            });
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error('Error accessing the camera:', error);
+                    });
+                } else {
+                    console.error('getUserMedia API is not supported by this browser.');
+                }
+            });
+    
+        </script>
+    </div>
+</html>

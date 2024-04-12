@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Kaisei+Opti&display=swap" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <title>One prediction</title>
+</head>
+
+<body>
+    <div class="g1_2">
+        <div class="r101_1"></div><span class="r101_2">Welcome to fruit recognition system!</span>
+        <div class="r102_1 r_uploaded-image with-background"></div><span class="r102_2">Class: </span><span class="r102_3">Status: </span><span
+            class="r102_4">Confident:</span><span class="r102_5">Confident:</span>
+        <button class="r105_1" onclick="redirectToOpenHomepage()">Start over</button>
+        <script>
+            function redirectToOpenHomepage() {
+                window.location.href = "{{ url_for('home_page') }}";
+            }
+             // Function to update the uploaded image dynamically
+             function updateUploadedImage(imageUrl) {
+                const uploadedImage = document.querySelector('.uploaded-image');
+                uploadedImage.style.backgroundImage = `url(${imageUrl})`;
+                uploadedImage.classList.add('with-background'); // Add the background class
+            }
+
+            // Function to upload one file and get the URL
+            function uploadFileAndSetImage(file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const imageUrl = data.uploaded_image_url;
+                    updateUploadedImage(imageUrl);
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        </script>
+    </div>
+</body>
+
+</html>
