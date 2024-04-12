@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Kaisei+Opti&display=swap" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <title>One prediction</title>
+</head>
+
+<body>
+    <div class="g1_2">
+        <div class="g101_2"></div><span class="g101_3">Choose your photo</span>
+        <div class="s103_2"></div>
+        <div class="s103_3"></div>
+        <button class="g103_4" onclick="window.location.href='one_prediction_result/index.html'">Open Camera</button>
+        <button class="g103_6" onclick="openFilePicker()">Upload your photo</button>
+        <script>
+          function openFilePicker() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.style.display = 'none';
+      
+            fileInput.addEventListener('change', function() {
+              const file = this.files[0];
+              uploadFile(file);
+            });
+      
+            document.body.appendChild(fileInput);
+            fileInput.click();
+          }
+      
+          function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+      
+            // You can add code here to upload the file to your server using AJAX or other methods
+            // For simplicity, this example just logs the file details
+            console.log('File selected:', file.name, 'Size:', file.size, 'Type:', file.type);
+      
+            // Remove the file input element from the DOM after uploading
+            document.body.removeChild(document.querySelector('input[type="file"]'));
+          }
+        </script>
+    </div>
+</body>
+
+</html>
