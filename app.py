@@ -1,12 +1,14 @@
 from flask import *
 from werkzeug.utils import secure_filename
-import os
 import base64
 from datetime import datetime
-import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+import tensorflow as tf
+from tensorflow import keras
+from libraries import class_prediction, fresh_prediction
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'taken_image'
 
@@ -21,9 +23,14 @@ def home_page():
 def one_prediction():
     return render_template('one_prediction_start/index.html')
 
-@app.route('/one_prediction_result')
+@app.route('/one_prediction_result',methods=["GET","POST"])
 def one_prediction_result():
-    return render_template('one_prediction_result/index.html')
+    fruit_class = request.args.get('fruit_class')
+    fruit_status = request.args.get('fruit_status')
+    class_proba = request.args.get('class_proba')
+    fresh_proba = request.args.get('fresh_proba')
+    return render_template('one_prediction_result/index.html',fruit_class=fruit_class,
+                           fruit_status=fruit_status,class_proba=class_proba,fresh_proba=fresh_proba)
 
 @app.route('/batch_prediction')
 def batch_prediction():
@@ -55,7 +62,12 @@ def take_picture():
         with open(file_path, 'wb') as f:
             f.write(decoded_data)
         # Redirect to a success page or return a success message
-        return redirect(url_for('one_prediction_result'))
+        uploaded_image_url = 'taken_image/'+file_name
+        fruit_class, class_proba = class_prediction(uploaded_image_url)
+        fruit_status, fresh_proba = fresh_prediction(uploaded_image_url)
+        return redirect(url_for('one_prediction_result', 
+                            fruit_class=fruit_class,fruit_status=fruit_status,
+                            class_proba=class_proba,fresh_proba=fresh_proba))
     return 'Invalid request.'
 #upload 1 photo
 
@@ -75,9 +87,12 @@ def upload_file():
     file_name = f'photo_{timestamp}.jpg'
     # Save the file to the "taken_image" folder
     file.save('taken_image/' + file_name)
-    uploaded_image_url = request.url_root + 'taken_image/'+file_name
-    print(uploaded_image_url)
-    return jsonify({'uploaded_image_url': uploaded_image_url}), 200
+    uploaded_image_url = 'taken_image/'+file_name
+    fruit_class, class_proba = class_prediction(uploaded_image_url)
+    fruit_status, fresh_proba = fresh_prediction(uploaded_image_url)
+    return redirect(url_for('one_prediction_result', 
+                            fruit_class=fruit_class,fruit_status=fruit_status,
+                            class_proba=class_proba,fresh_proba=fresh_proba))
 
 @app.route('/upload_batch', methods=['POST'])
 def upload_files():

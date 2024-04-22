@@ -12,7 +12,7 @@ def predict(a,thres=0.5):
         return 0
 img_height, img_width = 180,180
 def fresh_prediction(img_url):
-    model = keras.models.load_model('model/fresh_prediction_ver4.h5')
+    model = keras.models.load_model('model/fresh_prediction_ver3.keras')
     img = cv2.imread(img_url) 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)        
     img = cv2.resize(img, (img_height, img_width))
@@ -42,6 +42,3 @@ def class_prediction(img_url):
     else:
         class_type='Strawberry'
     return class_type,probability
-
-class_type,probability = class_prediction('taken_image/15.jpg')
-print(class_type,probability)
