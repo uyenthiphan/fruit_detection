@@ -1,62 +1,98 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Kaisei+Opti&display=swap" rel="stylesheet" />
-    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
-    <title>Photo capture</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Capture</title>
+	<link href="static/css/styles.css" rel="stylesheet">
+	<script src="static/javascript/script.js"></script>
 </head>
-
 <body>
-    <div class="g1_2">
-        <div class="v101_2"></div><span class="v101_3">Capture your photo</span>
-        <!-- Video frame container -->
-        <div class="v103_2" id="videoContainer"></div>
-        <form id="uploadForm" action="/take_picture" method="POST">
-            <input type="hidden" id="photoInput" name="photoInput">
-            <button class="v103_4" id="captureButton" type="button">Predict</button>
-        </form>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Check if the browser supports media devices and getUserMedia API
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    // Request access to the camera
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function(stream) {
-                        // Create a video element to display the camera stream
-                        var video = document.createElement('video');
-                        video.srcObject = stream;
-                        video.autoplay = true;
-                        document.getElementById('videoContainer').appendChild(video);
-    
-                        // Wait for video metadata to load
-                        video.addEventListener('loadedmetadata', function() {
-                            var captureButton = document.getElementById('captureButton');
-    
-                            // Capture photo when the button is clicked
-                            captureButton.addEventListener('click', function() {
-                                var canvas = document.createElement('canvas');
-                                canvas.width = video.videoWidth;
-                                canvas.height = video.videoHeight;
-                                var context = canvas.getContext('2d');
-    
-                                // Capture the photo immediately without delay
-                                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                                var photoUrl = canvas.toDataURL('image/png');
-                                document.getElementById('photoInput').value = photoUrl;
-                                // Submit the form automatically to save the photo
-                                document.getElementById('uploadForm').submit();
-                            });
-                        });
-                    })
-                    .catch(function(error) {
-                        console.error('Error accessing the camera:', error);
-                    });
-                } else {
-                    console.error('getUserMedia API is not supported by this browser.');
-                }
-            });
-    
-        </script>
-    </div>
+    <section id="header">
+        <div id="header-content">
+            <h1>Machine Learning fruit quality (Rotten and healthy) detection.</h1>
+            <p>For strawberries, peaches and pomegranates.</p>
+        </div>
+		<script>
+			document.getElementById("header-content").addEventListener("click", function() {
+				window.location.href = "/"; 
+			});
+		</script>
+    </section>
+
+    <!-- Sessão 2 - Camera Capture -->
+    <section id="section2-camera">
+		<div id="camera-message">Camera Capture</div>
+		<div id="image-preview" alt="Image Preview"></div>
+		<form id="uploadForm" action="/take_picture" method="POST">
+			<input type="hidden" id="photoInput" name="photoInput">
+			<button id="capture-button">Capture Image</button>
+		</form>
+    </section>
+    <script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// Check if the browser supports media devices and getUserMedia API
+			if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+				// Request access to the camera
+				navigator.mediaDevices.getUserMedia({ video: true })
+				.then(function(stream) {
+					// Create a video element to display the camera stream
+					var video = document.createElement('video');
+					video.srcObject = stream;
+					video.autoplay = true;
+					document.getElementById('image-preview').appendChild(video);
+
+					// Wait for video metadata to load
+					video.addEventListener('loadedmetadata', function() {
+						var captureButton = document.getElementById('capture-button');
+
+						// Capture photo when the button is clicked
+						captureButton.addEventListener('click', function() {
+							var canvas = document.createElement('canvas');
+							canvas.width = video.videoWidth;
+							canvas.height = video.videoHeight;
+							var context = canvas.getContext('2d');
+
+							// Capture the photo immediately without delay
+							context.drawImage(video, 0, 0, canvas.width, canvas.height);
+							var photoUrl = canvas.toDataURL('image/png');
+							document.getElementById('photoInput').value = photoUrl;
+							// Submit the form automatically to save the photo
+							document.getElementById('uploadForm').submit();
+						});
+					});
+				})
+				.catch(function(error) {
+					console.error('Error accessing the camera:', error);
+				});
+			} else {
+				console.error('getUserMedia API is not supported by this browser.');
+			}
+		});
+
+	</script>	
+
+    <section id="section3-dark">
+        <div class="carousel">
+			<div class="image-container">
+				<a href="javascript:openFilePicker_one();">
+					<img src="/static/images/individual.jpg" alt="Individual Image">
+					<p>Individual Image</p>
+				</a>
+			</div>
+			<div class="image-container">
+				<a href="javascript:openFilePicker_batch();">
+					<img src="/static/images/group.jpg" alt="Group of Images">
+					<p>Group of Images</p>
+				</a>
+			</div>
+			<div class="image-container">
+				<a href="javascript:redirectToOpenCamera();">
+					<img src="/static/images/camera.jpg" alt="Camera Capture">
+					<p>Camera Capture</p>
+				</a>
+			</div>		
+        </div>
+    </section>
+</body>
 </html>

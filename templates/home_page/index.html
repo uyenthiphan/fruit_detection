@@ -1,105 +1,92 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Kaisei+Opti&display=swap" rel="stylesheet" />
-    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
-    <title>Fruit recognition system</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAIT - Machine Learning Project</title>
+	<link href="static/css/styles.css" rel="stylesheet">
+	<script src="static/javascript/script.js"></script>
 </head>
-
 <body>
-    <div class="g1_2">
-        <div class="g101_2"></div><span class="g101_3">Welcome to fruit recognition system!</span>
-        <div class="h103_2"></div>
-        <div class="h103_3"></div>
-        <div class="h103_4"></div>
-        <button class="h103_5" onclick="openFilePicker_one()">One-by-one prediction</button>
-        <button class="h103_6" onclick="openFilePicker_batch()">Batch prediction</button>
-        <button class="h103_7" onclick="redirectToOpenCamera()">Open camera</button>
-        <script>
-            function redirectToOpenCamera() {
-                window.location.href = "{{ url_for('camera_capture') }}";
-            }
-            function openFilePicker_one() {
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.accept = 'image/*';
-                fileInput.style.display = 'none';
-          
-                fileInput.addEventListener('change', function() {
-                  const file = this.files[0];
-                  uploadFile(file);
-                
-                });
-                document.body.appendChild(fileInput);
-                fileInput.click();
-            }
-          
-            function uploadFile(file) {
-                const formData = new FormData();
-                formData.append('file', file);
-                
-                fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (response.ok) {
-                        console.log('File uploaded successfully.');
-                    } else {
-                        console.error('Error uploading file.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
-            function openFilePicker_batch() {
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.accept = 'image/*';
-                fileInput.multiple = true;
-                fileInput.style.display = 'none';
-          
-                fileInput.addEventListener('change', function() {
-                  const files = this.files;
-                  if (files.length <= 10) {
-                    uploadFiles(files);
-                  } else {
-                    alert('You can upload a maximum of 10 files.');
-                  }
-                });
-          
-                document.body.appendChild(fileInput);
-                fileInput.click();
-            }
-          
-            function uploadFiles(files) {
-                const formData = new FormData();
-          
-                for (let i = 0; i < files.length; i++) {
-                  const file = files[i];
-                  formData.append('files[]', file);
-                }
-                
-                fetch('/upload_batch', {
-                method: 'POST',
-                body: formData
-                })
-                .then(response => {
-                if (response.ok) {
-                    console.log('Files uploaded successfully.');
-                    window.location.href = "{{ url_for('batch_prediction_result') }}"; // Redirect to batch_prediction_result
-                } else {
-                    console.error('Error uploading files.');
-                }
-                })
-            .catch(error => {
-                console.error('Error:', error);
-});
-            }
-        </script>
-    </div>
-</body>
 
+   <section id="header">
+        <div id="header-content">
+            <h1>Machine Learning fruit quality (Rotten and healthy) detection.</h1>
+            <p>For strawberries, peaches and pomegranates.</p>
+        </div>
+    </section>
+    
+    <section id="section2">
+        <p>According to <a href="https://www.wfp.org/stories/5-facts-about-food-waste-and-hunger">WFP</a>, all the food produced but never consumed would be enough to feed two billion people, which represents more than double the number of malnourished people worldwide.</p>
+        <p>Automating production, storage and distribution processes can help reduce waste and hunger.</p>
+    </section>
+    
+    <section id="section3">
+        <p>This project provides 3 verification options: individual image, group of images and camera capture.</p>
+    </section>
+    
+    <section id="section4">
+        <div class="album">
+			<div class="home-image-container">
+				<a href="javascript:openFilePicker_one();">
+					<img src="/static/images/individual.jpg" alt="Individual Image">
+					<p>Individual Image</p>
+				</a>
+			</div>
+			<div class="home-image-container">				
+				<a href="javascript:openFilePicker_batch();">
+					<img src="/static/images/group.jpg" alt="Group of Images">
+					<p>Group of Images</p>
+				</a>
+			</div>
+			<div class="home-image-container">	
+				<a href="javascript:redirectToOpenCamera();">
+					<img src="/static/images/camera.jpg" alt="Camera Capture">
+					<p>Camera Capture</p>
+				</a>
+			</div>
+        </div>
+    </section>
+    
+    <section id="section5">
+        <p>"Coming together is a beginning. Keeping together is progress. Working together is success. " ~ Henry Ford</p>
+    </section>
+    
+    <section id="section6">
+        <div class="album">
+			<div class="home-image-container">	
+				<div>
+					<a href="https://www.linkedin.com/in/kathya-castillo/">
+						<img src="/static/images/kathya.jpg" alt="Kathya Castillo">
+						<p>Kathya Castillo</p>
+					</a>
+				</div>
+			</div>
+			<div class="home-image-container">	
+				<div>
+					<a href="https://www.linkedin.com/in/uyenthiphan/">
+						<img src="/static/images/thi.jpg" alt="Thi Phan">
+						<p>Thi Phan</p>
+					</a>
+				</div>
+			</div>
+			<div class="home-image-container">	
+				<div>
+					<a href="https://www.linkedin.com/in/gcfujita/">
+						<img src="/static/images/gabriel.jpg" alt="Gabriel C. Fujita">
+						<p>Gabriel C. Fujita</p>
+					</a>
+				</div>
+			</div>
+			<div class="home-image-container">	
+				<div>
+					<a href="https://www.linkedin.com/in/riverdemorais/">
+						<img src="/static/images/	river.png" alt="River de Morais e Silva">
+						<p>River de Morais e Silva</p>
+					</a>
+				</div>
+			</div>
+        </div>
+    </section>
+</body>
 </html>

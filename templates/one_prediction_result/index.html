@@ -1,24 +1,59 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Kaisei+Opti&display=swap" rel="stylesheet" />
-    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
-    <title>One prediction</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Individual image result</title>
+	<link href="static/css/styles.css" rel="stylesheet">
+	<script src="static/javascript/script.js"></script>
 </head>
-
 <body>
-    <div class="g1_2">
-        <div class="r101_1"></div><span class="r101_2">Welcome to fruit recognition system!</span>
-        <div class="r102_1"></div><p class="r102_2">Class: {{ fruit_class }}</p><p class="r102_3">Status: {{ fruit_status }} </p><p
-            class="r102_4">Confident: {{ class_proba }}</p><p class="r102_5">Confident: {{fresh_proba}}</p>
-        <button class="r105_1" onclick="redirectToOpenHomepage()">Start over</button>
-        <script>
-            function redirectToOpenHomepage() {
-                window.location.href = "{{ url_for('home_page') }}";
-            }
-        </script>
-    </div>
-</body>
+    <section id="header">
+        <div id="header-content">
+            <h1>Machine Learning fruit quality (Rotten and healthy) detection.</h1>
+            <p>For strawberries, peaches and pomegranates.</p>
+        </div>
+		<script>
+			document.getElementById("header-content").addEventListener("click", function() {
+				window.location.href = "/"; 
+			});
+		</script>
+    </section>
 
+    <section id="section2-light">
+        <div class="left">
+            <img src="{{ upload_result[0].uploaded_image_url }}" alt="Fruta">
+        </div>
+        <div class="right">
+			<p>Type of fruit detected: {{ upload_result[0].class_type }}</p>
+            <p>Confidence index: {{ upload_result[0].class_probabilities }}</p>
+			<br />
+            <p>Fruit detected status: {{ upload_result[0].fresh_predict }}</p>
+            <p>Confidence index: {{ upload_result[0].fresh_probability }}</p>
+        </div>
+    </section>
+
+    <section id="section3-dark">
+        <div class="carousel">
+			<div class="image-container">
+				<a href="javascript:openFilePicker_one();">
+					<img src="/static/images/individual.jpg" alt="Individual Image">
+					<p>Individual Image</p>
+				</a>
+			</div>
+			<div class="image-container">
+				<a href="javascript:openFilePicker_batch();">
+					<img src="/static/images/group.jpg" alt="Group of Images">
+					<p>Group of Images</p>
+				</a>
+			</div>
+			<div class="image-container">
+				<a href="javascript:redirectToOpenCamera();">
+					<img src="/static/images/camera.jpg" alt="Camera Capture">
+					<p>Camera Capture</p>
+				</a>
+			</div>		
+        </div>
+    </section>
+</body>
 </html>

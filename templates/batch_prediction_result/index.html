@@ -1,79 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Kaisei+Opti&display=swap" rel="stylesheet" />
-    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
-    <title>Batch prediction</title>
+    <title>Group of Images Result</title>
+	<link href="static/css/styles.css" rel="stylesheet">
+	<script src="static/javascript/script.js"></script>
 </head>
 <body>
-    <div class="g1_2">
-        <div class="g101_2"></div><span class="g101_3">Predictions</span>
-        <table class="table-format">
+    <section id="header">
+        <div id="header-content">
+            <h1>Machine Learning fruit quality (Rotten and healthy) detection.</h1>
+            <p>For strawberries, peaches and pomegranates.</p>
+        </div>
+		<script>
+			document.getElementById("header-content").addEventListener("click", function() {
+				window.location.href = "/"; 
+			});
+		</script>
+    </section>
+
+    <section id="section2-table">
+        <table>
             <thead>
-            <tr>
-                <th class="big-cell">Image</th>
-                <th class="small-cell">Fresh </th>
-                <th class="small-cell">Class</th>
-                <th class="small-cell">Fresh Confidence</th>
-                <th class="small-cell">Class Confidence</th>
-            </tr>
+                <tr>
+                    <th>Image</th>
+                    <th>Fresh</th>
+                    <th>Class</th>
+                    <th>Fresh Confidence</th>
+                    <th>Class Confidence</th>
+                </tr>
             </thead>
-            <tbody id="imageResults">
-            <!-- Rows will be dynamically added here -->
+            <tbody>
+				{% for fruit in upload_result %}
+                <tr>
+                    <td><img src="{{ fruit.uploaded_image_url }}" alt="Fruit" class="table-image"></td>
+                    <td>{{ fruit.fresh_predict }}</td>
+                    <td>{{ fruit.class_type }}</td>
+                    <td>{{ fruit.fresh_probability }}</td>
+                    <td>{{ fruit.class_probabilities }}</td>
+                </tr>
+				{% endfor %}
             </tbody>
         </table>
+    </section>
 
-        <script>
-            // Sample data (replace with actual data retrieval logic)
-            const records = [
-            { image: 'path/to/image1.jpg', fresh: 1, class: 'Class A', freshConfidence: 0.85, classConfidence: 0.92 },
-            { image: 'path/to/image2.jpg', fresh: 0, class: 'Class B', freshConfidence: 0.72, classConfidence: 0.88 },
-            { image: 'path/to/image1.jpg', fresh: 1, class: 'Class A', freshConfidence: 0.85, classConfidence: 0.92 },
-            { image: 'path/to/image2.jpg', fresh: 0, class: 'Class B', freshConfidence: 0.72, classConfidence: 0.88 },
-            { image: 'path/to/image1.jpg', fresh: 1, class: 'Class A', freshConfidence: 0.85, classConfidence: 0.92 },
-            { image: 'path/to/image2.jpg', fresh: 0, class: 'Class B', freshConfidence: 0.72, classConfidence: 0.88 },
-            { image: 'path/to/image1.jpg', fresh: 1, class: 'Class A', freshConfidence: 0.85, classConfidence: 0.92 },
-            { image: 'path/to/image2.jpg', fresh: 0, class: 'Class B', freshConfidence: 0.72, classConfidence: 0.88 },
-            { image: 'path/to/image1.jpg', fresh: 1, class: 'Class A', freshConfidence: 0.85, classConfidence: 0.92 },
-            { image: 'path/to/image2.jpg', fresh: 0, class: 'Class B', freshConfidence: 0.72, classConfidence: 0.88 },
-            // Add more records here as needed
-            ];
-
-            const tableBody = document.getElementById('imageResults');
-
-            records.slice(0, 10).forEach(record => {
-            const row = document.createElement('tr');
-
-            const imageCell = document.createElement('td');
-            imageCell.classList.add('big-cell');
-            const image = document.createElement('img');
-            image.src = record.image;
-            image.alt = 'Image';
-            imageCell.appendChild(image);
-            row.appendChild(imageCell);
-
-            const freshCell = document.createElement('td');
-            freshCell.textContent = record.fresh;
-            row.appendChild(freshCell);
-
-            const classCell = document.createElement('td');
-            classCell.textContent = record.class;
-            row.appendChild(classCell);
-
-            const freshConfidenceCell = document.createElement('td');
-            freshConfidenceCell.classList.add('small-cell');
-            freshConfidenceCell.textContent = record.freshConfidence.toFixed(2);
-            row.appendChild(freshConfidenceCell);
-
-            const classConfidenceCell = document.createElement('td');
-            classConfidenceCell.classList.add('small-cell');
-            classConfidenceCell.textContent = record.classConfidence.toFixed(2);
-            row.appendChild(classConfidenceCell);
-
-            tableBody.appendChild(row);
-            });
-        </script>
+    <section id="section3-dark">
+        <div class="carousel">
+			<div class="image-container">
+				<a href="javascript:openFilePicker_one();">
+					<img src="/static/images/individual.jpg" alt="Individual Image">
+					<p>Individual Image</p>
+				</a>
+			</div>
+			<div class="image-container">
+				<a href="javascript:openFilePicker_batch();">
+					<img src="/static/images/group.jpg" alt="Group of Images">
+					<p>Group of Images</p>
+				</a>
+			</div>
+			<div class="image-container">
+				<a href="javascript:redirectToOpenCamera();">
+					<img src="/static/images/camera.jpg" alt="Camera Capture">
+					<p>Camera Capture</p>
+				</a>
+			</div>		
+        </div>
+    </section>
 </body>
 </html>
